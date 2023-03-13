@@ -12,7 +12,7 @@ public:
     XmlStorage();
 
     std::vector<Note> read();
-    bool write(std::vector<Note> notes);
+    bool write(std::vector<std::reference_wrapper<Note> > notes);
 
 private:
     void writeNote(QXmlStreamWriter& stream, const Note& note);

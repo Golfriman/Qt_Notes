@@ -71,13 +71,13 @@ QTextDocument *NotesManager::noteDocument(int id) const
     return nullptr;
 }
 
-std::vector<Note> NotesManager::noteCollection()
+std::vector<std::reference_wrapper<Note>> NotesManager::noteCollection()
 {
-    std::vector<Note> out;
+    std::vector<std::reference_wrapper<Note>> out;
     for(auto& i:  notes)
     {
         auto& [note, textDocument] = i.second;
-        note.content = textDocument->toMarkdown();
+        note.content = textDocument->toPlainText();
         out.push_back(note);
     }
     return out;

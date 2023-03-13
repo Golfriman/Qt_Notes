@@ -8,6 +8,7 @@
 #include <QTextDocument>
 #include <QSignalMapper>
 #include <vector>
+#include <functional>
 
 class NotesManager : public QObject
 {
@@ -25,7 +26,7 @@ public:
 
     QTextDocument* noteDocument(int id)const;
 
-    std::vector<Note> noteCollection();
+    std::vector<std::reference_wrapper<Note>> noteCollection();
 
     size_t count()const;
 

@@ -5,7 +5,7 @@
 
 XmlStorage::XmlStorage()
 {
-    QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString path = ".";
     QDir dir;
 
     if(!dir.exists(path))
@@ -40,7 +40,7 @@ std::vector<Note> XmlStorage::read()
     return notes;
 }
 
-bool XmlStorage::write(std::vector<Note> notes)
+bool XmlStorage::write(std::vector<std::reference_wrapper<Note> > notes)
 {
     QFile outputFile(fullFilePath);
 
@@ -68,11 +68,11 @@ bool XmlStorage::write(std::vector<Note> notes)
 
 void XmlStorage::writeNote(QXmlStreamWriter &stream, const Note &note)
 {
-    stream.writeStartDocument(noteToken);
+    stream.writeStartElement(noteToken);
 
     stream.writeAttribute(titleToken, note.title);
     stream.writeAttribute(lastModified, note.lastModified.toString(dateTimeFormat));
-    stream.writeAttribute(contentToken, note.content);
+    stream.writeTextElement(contentToken, note.content);
 
     stream.writeEndElement();
 }
@@ -86,6 +86,7 @@ void XmlStorage::readNote(QXmlStreamReader &stream, std::vector<Note> &notes)
 
         note.title = attributes.value(titleToken).toString();
         note.lastModified = QDateTime::fromString(attributes.value(lastModified).toString(), dateTimeFormat);
+
         stream.readNextStartElement();
         if(stream.name() == contentToken)
         {
